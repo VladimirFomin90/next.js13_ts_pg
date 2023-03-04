@@ -1,9 +1,5 @@
-
-
 export default function Home() {
-  return (
-    <main>
-      
-    </main>
-  )
+	return <main>
+		<h1>Hello Next.js13</h1>
+	</main>;
 }
