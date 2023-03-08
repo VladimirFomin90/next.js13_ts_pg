@@ -1,9 +1,37 @@
-'use client'
-import AddPost from './components/Addpost';
+'use client';
 
-export default function Home() {
-	return <main>
-		<h1>Hello Next.js13</h1>
-		<AddPost />
-	</main>;
+import Post from './components/Post';
+import AddPost from './components/Addpost';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+//Fetch All posts
+const allPosts = async () => {
+	const response = await axios.get("/api/posts/getPosts")
+	return response.data
+  }
+  
+  export default function Home() {
+	const { data, error, isLoading } = useQuery<PostsType[]>({
+	  queryFn: allPosts,
+	  queryKey: ["posts"],
+	})
+	if (error) return error
+	if (isLoading) return "Loading....."
+
+	return (
+		<div>
+		  <AddPost />
+		  {!data.map((post) => (
+			<Post
+			  key={post.id}
+			  id={post.id}
+			  name={post.user.name}
+			  avatar={post.user.image}
+			  postTitle={post.title}
+			//   comments={post.comments}
+			/>
+		  ))}
+		</div>
+	  )
 }
