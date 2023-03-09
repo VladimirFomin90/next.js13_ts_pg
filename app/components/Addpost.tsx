@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 export default function CreatePost() {
 	const [title, setTitle] = useState('');
 	const [isDisables, setIsDisables] = useState(false);
-	let toastPostID: string;
 
 	// create a post
 	const { mutate } = useMutation(
