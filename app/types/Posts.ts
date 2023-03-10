@@ -6,11 +6,11 @@ export type PostType = {
         name: string,
         image: string
     },
-    comments?: {
+    Comment?: {
         createdAt: string,
         id: string,
         postId: string,
         userId: string,
-    }
+    }[]
 
 }
