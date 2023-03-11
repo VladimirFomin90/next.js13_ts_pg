@@ -25,6 +25,7 @@ export default async function handler(
 		if (!title.length)
 			return res.status(403).json({ message: 'Write something!' });
 
+		// create Post
 		try {
 			const result = await prisma.post.create({
 				data: {
