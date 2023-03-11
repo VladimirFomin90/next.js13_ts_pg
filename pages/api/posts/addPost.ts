@@ -14,12 +14,12 @@ export default async function handler(
 
 		const title: string = req.body.title;
 
-        // User
+		// User
 		const prismaUser = await prisma.user.findUnique({
 			where: { email: session?.user?.email },
 		});
 
-        // Check title
+		// Check title
 		if (title.length > 240)
 			return res.status(403).json({ message: 'Too long text!' });
 		if (!title.length)
@@ -30,12 +30,14 @@ export default async function handler(
 			const result = await prisma.post.create({
 				data: {
 					title,
-                    userId: prismaUser.id,
+					userId: prismaUser.id,
 				},
 			});
-            res.status(200).json(result)
+			res.status(200).json(result);
 		} catch (error) {
-            res.status(403).json({error: 'Error has occured while making a post'})
-        }
+			res.status(403).json({
+				error: 'Error has occured while making a post',
+			});
+		}
 	}
 }
