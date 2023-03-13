@@ -7,8 +7,9 @@ import toast from 'react-hot-toast';
 
 export default function CreatePost() {
 	const [title, setTitle] = useState('');
-	const [isDisables, setIsDisables] = useState(false);
+	const [isDisabled, setIsDisabled] = useState(false);
 	const queryClient = useQueryClient();
+	let toastPostID: string;
 
 	// create a post
 	const { mutate } = useMutation(
@@ -17,22 +18,25 @@ export default function CreatePost() {
 		{
 			onError: (error) => {
 				if (error instanceof AxiosError) {
-					toast.error(error?.response?.data.message);
+					toast.error(error?.response?.data.message, {
+						id: toastPostID,
+					});
 				}
-				setIsDisables(false);
+				setIsDisabled(false);
 			},
 			onSuccess: (data) => {
-				toast.success('Post has been made!');
-				queryClient.invalidateQueries(['posts'])
+				queryClient.invalidateQueries(['posts']);
+				toast.success('Post has been made', { id: toastPostID });
 				setTitle('');
-				setIsDisables(false);
+				setIsDisabled(false);
 			},
 		}
 	);
 
 	const submitPost = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsDisables(true);
+		setIsDisabled(true);
+		// toastPostID = toast.loading('Creating your post', { id: toastPostID });
 		mutate(title);
 	};
 
@@ -40,7 +44,7 @@ export default function CreatePost() {
 		<form onSubmit={submitPost} className='bg-white my-8 p-8 rounded-md'>
 			<div className='flex flex-col my-4'>
 				<textarea
-					onChange={(text) => setTitle(text.target.value)}
+					onChange={(e) => setTitle(e.target.value)}
 					name='title'
 					value={title}
 					placeholder="What's on your mind?"
@@ -54,7 +58,7 @@ export default function CreatePost() {
 					}`}
 				>{`${title.length}/240`}</p>
 				<button
-					disabled={isDisables}
+					disabled={isDisabled}
 					className='text-sm bg-teal-600 text-white p-2 rounded-xl px-6 disabled:opacity-25 '
 				>
 					Create a post
